@@ -32,6 +32,7 @@ class AgendasController < ApplicationController
     else
       redirect_to dashboard_url, notice: "削除はアジェンダのオーナーは作成者のみです"
     end
+    #-------
   end
 
   private
