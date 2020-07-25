@@ -252,6 +252,7 @@ ja:
       team_you_belong_to: '所属しているチーム'
       posted_articles: '投稿した記事一覧'
       transfer_of_owner: 'チームのオーナーの権限を移動しました'
+      failed_to_edit_team: 'チームオーナーのみチーム情報を編集できます'
     button:
       submit: '投稿'
       edit: '編集'
