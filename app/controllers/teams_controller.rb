@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_team, only: %i[show edit update destroy]
+  before_action :set_team, only: %i[show edit update destroy transfer_of_owner]
 
   def index
     @teams = Team.all
@@ -15,7 +15,11 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    if @team.owner != current_user
+      redirect_to team_url(@team), notice: I18n.t('views.messages.failed_to_edit_team')
+    end
+  end
 
   def create
     @team = Team.new(team_params)
@@ -45,6 +49,15 @@ class TeamsController < ApplicationController
 
   def dashboard
     @team = current_user.keep_team_id ? Team.find(current_user.keep_team_id) : current_user.teams.first
+  end
+
+  def transfer_of_owner
+    assign_id = params[:assign_id]
+    transfer_user_id = Assign.find(assign_id).user_id
+    binding.pry
+    @team.update(owner_id: transfer_user_id)
+    TeamMailer.team_mail(@team).deliver
+    redirect_to team_url(@team), notice: I18n.t('views.messages.transfer_of_owner')
   end
 
   private
